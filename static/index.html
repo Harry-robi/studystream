@@ -10,218 +10,1484 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html, body {
+            height: 100%;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f2efe8;
+            color: #222;
+        }
+
+        body.theme-dark {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+
+        body.theme-dark .container {
+            background: #020617;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            padding: 16px 24px 90px; /* extra bottom padding for sticky audio bar */
+            background: #fffdf7;
+        }
+
+        body.theme-dark .container {
+            background: #020617;
+        }
+
+        header.main-header {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0ddd5;
+            padding-bottom: 8px;
+        }
+
+        body.theme-dark header.main-header {
+            border-color: #1f2937;
+        }
+
+        header.main-header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        header.main-header p {
+            margin-top: 4px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        body.theme-dark header.main-header p {
+            color: #9ca3af;
+        }
+
+        .layout {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            min-height: 0;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                flex-direction: column;
+            }
+        }
+
+        .controls-panel {
+            flex: 0 0 260px;
+            max-width: 300px;
+            transition: flex-basis 0.2s ease, max-width 0.2s ease, width 0.2s ease;
+        }
+
+        body.full-reading .controls-panel {
+            display: none;
+        }
+
+        .right-panel {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Center reader column in full mode */
+        body.full-reading .right-panel {
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
         }
-        
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 600px;
+
+        body.full-reading .reader-wrapper {
+            max-width: 800px;
             width: 100%;
+            padding-left: 24px;
+            padding-right: 24px;
         }
-        
-        h1 {
-            color: #667eea;
+
+        /* Sidebar header + icons */
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 10px;
-            text-align: center;
         }
-        
-        p {
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
+
+        .sidebar-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #777;
         }
-        
-        .upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 20px;
+
+        .sidebar-icon-btn {
+            border: none;
+            background: transparent;
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 1rem;
+            line-height: 1;
+            padding: 4px;
+            border-radius: 999px;
         }
-        
+
+        .sidebar-icon-btn:hover {
+            background: rgba(0,0,0,0.06);
+        }
+
+        body.theme-dark .sidebar-icon-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .sidebar-icon-column {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Collapsed sidebar */
+        .controls-panel.collapsed {
+            flex: 0 0 56px;
+            max-width: 56px;
+        }
+
+        .controls-panel.collapsed .sidebar-text {
+            display: none;
+        }
+
+        .controls-panel.collapsed .upload-area,
+        .controls-panel.collapsed .current-doc-label,
+        .controls-panel.collapsed .status,
+        .controls-panel.collapsed .session-panel {
+            display: none;
+        }
+
+        .controls-panel.collapsed .sidebar-icon-column {
+            display: flex;
+        }
+
+        .controls-panel.collapsed .sidebar-header {
+            justify-content: center;
+        }
+
+        /* Upload + controls */
+        .upload-area {
+            border: 1px dashed #c0b8a5;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            background: #fffbf2;
+        }
+
         .upload-area:hover {
-            background: #f8f9ff;
-            border-color: #764ba2;
+            background: #fff7e4;
+            border-color: #b0a48c;
         }
-        
+
         input[type="file"] {
             display: none;
         }
-        
-        .upload-btn {
-            background: #667eea;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
+
+        .upload-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 6px;
         }
-        
-        .upload-btn:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
+
+        .upload-subtitle {
+            font-size: 0.8rem;
+            color: #777;
         }
-        
+
+        .file-name {
+            color: #444;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+
         .convert-btn {
             width: 100%;
-            background: #764ba2;
+            background: #373f51;
             color: white;
-            padding: 15px;
+            padding: 10px 14px;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
+            border-radius: 999px;
+            font-size: 0.95rem;
             cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
+            margin-top: 14px;
+            transition: background 0.2s, transform 0.1s;
             display: none;
         }
-        
-        .convert-btn:hover {
-            background: #667eea;
+
+        .convert-btn:hover:enabled {
+            background: #2b3242;
+            transform: translateY(-1px);
         }
-        
+
+        .convert-btn:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+
         .status {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 12px;
+            padding: 10px 12px;
             border-radius: 10px;
             display: none;
+            font-size: 0.85rem;
         }
-        
+
         .status.loading {
-            background: #fff3cd;
-            color: #856404;
+            background: #fff7da;
+            color: #7a650e;
             display: block;
         }
-        
+
         .status.success {
-            background: #d4edda;
-            color: #155724;
+            background: #e3f3df;
+            color: #275222;
             display: block;
         }
-        
-        .audio-player {
-            margin-top: 20px;
-            display: none;
+
+        .status.error {
+            background: #fbe3e4;
+            color: #7f1d1d;
+            display: block;
         }
-        
-        audio {
+
+        .info-note {
+            font-size: 0.75rem;
+            color: #777;
+            margin-top: 6px;
+        }
+
+        .current-doc-label {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 12px;
+        }
+
+        body.theme-dark .current-doc-label,
+        body.theme-dark .info-note,
+        body.theme-dark .upload-subtitle {
+            color: #9ca3af;
+        }
+
+        /* Session PDFs panel */
+        .session-panel {
+            margin-top: 18px;
+            border-radius: 10px;
+            border: 1px solid #e0ddd5;
+            overflow: hidden;
+        }
+
+        body.theme-dark .session-panel {
+            border-color: #1f2937;
+        }
+
+        .session-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            background: #f4f1e6;
+            cursor: pointer;
+        }
+
+        body.theme-dark .session-panel-header {
+            background: #020617;
+        }
+
+        .session-panel-header span {
+            font-weight: 500;
+        }
+
+        .session-panel-body {
+            max-height: 180px;
+            overflow-y: auto;
+            background: #fffbf2;
+        }
+
+        body.theme-dark .session-panel-body {
+            background: #020617;
+        }
+
+        .doc-empty {
+            font-size: 0.8rem;
+            color: #999;
+            padding: 8px 8px;
+            font-style: italic;
+        }
+
+        .doc-item {
             width: 100%;
-            margin-top: 10px;
+            border: none;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+            padding: 7px 8px;
+            border-bottom: 1px solid #e0ddd5;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 0.8rem;
         }
+
+        body.theme-dark .doc-item {
+            border-color: #1f2937;
+        }
+
+        .doc-item:last-child {
+            border-bottom: none;
+        }
+
+        .doc-item:hover {
+            background: #f2ede0;
+        }
+
+        body.theme-dark .doc-item:hover {
+            background: #111827;
+        }
+
+        .doc-item.active {
+            background: #e3ddcf;
+        }
+
+        body.theme-dark .doc-item.active {
+            background: #1f2937;
+        }
+
+        .doc-item-title {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .doc-item-sub {
+            font-size: 0.7rem;
+            color: #777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        body.theme-dark .doc-item-sub {
+            color: #9ca3af;
+        }
+
+        /* Reader */
+        .reader-wrapper {
+            border-radius: 14px;
+            background: #fdf9f2;
+            border: 1px solid #e0ddd5;
+            padding: 12px 14px 16px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        body.theme-dark .reader-wrapper {
+            background: #020617;
+            border-color: #1f2937;
+        }
+
+        .reader-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .reader-header-left h2 {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .reader-header-left span {
+            display: block;
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .reader-header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #readingSettingsBtn,
+        #fullModeToggle {
+            font-size: 0.78rem;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid #d0c7b7;
+            cursor: pointer;
+            background: #fffdf7;
+        }
+
+        body.theme-dark #readingSettingsBtn,
+        body.theme-dark #fullModeToggle {
+            background: #020617;
+            border-color: #1f2937;
+            color: #e5e7eb;
+        }
+
+        .reader-content {
+            margin-top: 6px;
+            overflow-y: auto;
+            padding-right: 6px;
+            font-family: "Georgia", "Times New Roman", serif;
+            font-size: var(--reader-font-size, 0.95rem);
+            line-height: 1.7;
+            color: #2b2620;
+            flex: 1;
+            position: relative;
+        }
+
+        body.theme-dark .reader-content {
+            color: #e5e7eb;
+        }
+
+        .reader-content p {
+            margin: 0 0 0.9em;
+        }
+
+        .reader-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .reader-content::-webkit-scrollbar-thumb {
+            background: #d2cbb9;
+            border-radius: 999px;
+        }
+
+        .reader-placeholder {
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Words and progress fading */
+        .word {
+            display: inline-block;
+            white-space: pre;
+        }
+
+        .word.listened {
+            color: #aaa7a0;
+        }
+
+        /* Rectangular highlights */
+        .word.highlight {
+            padding: 1px 2px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .highlight-yellow {
+            background: #fff8b8;
+        }
+
+        .highlight-pink {
+            background: #ffd6e8;
+        }
+
+        .highlight-blue {
+            background: #d7ecff;
+        }
+
+        .highlight-green {
+            background: #dff7d9;
+        }
+
+        .highlight-purple {
+            background: #eadcff;
+        }
+
+        /* Selection toolbar */
+        #highlightToolbar {
+            position: absolute;
+            display: none;
+            background: #111827;
+            color: #f9fafb;
+            font-size: 0.78rem;
+            padding: 4px 8px;
+            border-radius: 999px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 20;
+            align-items: center;
+            gap: 4px;
+        }
+
+        #highlightToolbar button {
+            border: none;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+
+        /* Note popup at text */
+        #notePopup {
+            position: absolute;
+            display: none;
+            background: #fffdf7;
+            border: 1px solid #e0ddd5;
+            border-radius: 12px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+            padding: 10px 10px 8px;
+            z-index: 30;
+            width: 240px;
+        }
+
+        body.theme-dark #notePopup {
+            background: #020617;
+            border-color: #1f2937;
+        }
+
+        #notePopupHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        #notePopupHeader h3 {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        #noteCloseBtn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .color-chip {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .color-chip.yellow { background: #fff8b8; }
+        .color-chip.pink { background: #ffd6e8; }
+        .color-chip.blue { background: #d7ecff; }
+        .color-chip.green { background: #dff7d9; }
+        .color-chip.purple { background: #eadcff; }
+
+        .color-chip.selected {
+            border-color: #111827;
+        }
+
+        body.theme-dark .color-chip.selected {
+            border-color: #e5e7eb;
+        }
+
+        #noteText {
+            width: 100%;
+            min-height: 60px;
+            border-radius: 8px;
+            border: 1px solid #ddd5c4;
+            padding: 4px 6px;
+            resize: vertical;
+            font-size: 0.78rem;
+            font-family: inherit;
+            background: #fffbf2;
+        }
+
+        body.theme-dark #noteText {
+            background: #020617;
+            border-color: #1f2937;
+            color: #e5e7eb;
+        }
+
+        #notePopupFooter {
+            margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+        }
+
+        #notePopupFooter button {
+            flex: 1;
+            font-size: 0.78rem;
+            padding: 5px 6px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #noteSaveBtn {
+            background: #373f51;
+            color: #fff;
+        }
+
+        #noteDeleteBtn {
+            background: #fbe3e4;
+            color: #7f1d1d;
+        }
+
+        #noteCancelBtn {
+            background: #e8e3d5;
+            color: #333;
+        }
+
+        body.theme-dark #noteSaveBtn {
+            background: #111827;
+            color: #e5e7eb;
+        }
+
+        body.theme-dark #noteDeleteBtn {
+            background: #7f1d1d;
+            color: #fee2e2;
+        }
+
+        body.theme-dark #noteCancelBtn {
+            background: #111827;
+            color: #e5e7eb;
+        }
+
+        /* Reading settings modal */
+        .settings-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 60;
+        }
+
+        .settings-modal-content {
+            background: #fffdf7;
+            border-radius: 12px;
+            padding: 12px 14px 10px;
+            min-width: 260px;
+            max-width: 320px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
+            border: 1px solid #e0ddd5;
+            font-size: 0.8rem;
+        }
+
+        body.theme-dark .settings-modal-content {
+            background: #020617;
+            border-color: #1f2937;
+            color: #e5e7eb;
+        }
+
+        .settings-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .settings-modal-header h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        #settingsCloseBtn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .settings-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .settings-group button {
+            border-radius: 999px;
+            border: 1px solid #d0c7b7;
+            background: #fffdf7;
+            padding: 2px 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+
+        body.theme-dark .settings-group button {
+            background: #020617;
+            border-color: #1f2937;
+            color: #e5e7eb;
+        }
+
+        .theme-toggle-btn {
+            border-radius: 999px;
+            border: 1px solid #d0c7b7;
+            background: #fffdf7;
+            padding: 2px 8px;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+
+        .theme-toggle-btn.active {
+            font-weight: 600;
+        }
+
+        body.theme-dark .theme-toggle-btn {
+            background: #020617;
+            border-color: #1f2937;
+            color: #e5e7eb;
+        }
+
+        /* Sticky bottom audio bar */
         
-        .file-name {
-            color: #667eea;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+
+.audio-player h3 {
+    font-size: 0.8rem;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+body.theme-dark .audio-player {
+    background: #020617;
+    border-color: #1f2937;
+}
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📚 StudyStream</h1>
-        <p>Convert your PDFs into audiobooks</p>
-        
-        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-            <div>
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                <p style="margin-top: 15px; color: #667eea;">Click to upload PDF</p>
+<div class="container">
+    <header class="main-header">
+        <h1>PDF to Audiobook</h1>
+        <p>Upload a PDF, listen to it, and annotate as you read along.</p>
+    </header>
+
+    <div class="layout">
+        <!-- LEFT: controls + session PDFs -->
+        <div class="controls-panel">
+            <div class="sidebar-header">
+                <button id="sidebarToggleBtn" class="sidebar-icon-btn" aria-label="Toggle sidebar">
+                    ☰
+                </button>
+                <span class="sidebar-title sidebar-text">Library</span>
+            </div>
+
+            <div class="sidebar-icon-column">
+                <button id="sidebarUploadIcon" class="sidebar-icon-btn" title="Upload PDF">⬆️</button>
+                <button id="sidebarDocsIcon" class="sidebar-icon-btn" title="Session PDFs">📚</button>
+            </div>
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-title sidebar-text">Choose a PDF</div>
+                <div class="upload-subtitle sidebar-text">Click to select a file from your device</div>
+            </div>
+
+            <input type="file" id="fileInput" accept=".pdf">
+
+            <div class="file-name sidebar-text" id="fileName"></div>
+
+            <button class="convert-btn" id="convertBtn">Convert to Audio</button>
+
+            <div class="status sidebar-text" id="status"></div>
+
+            <div class="current-doc-label sidebar-text" id="currentDocLabel">
+                No document loaded.
+            </div>
+
+            <div class="session-panel">
+                <div class="session-panel-header" id="sessionToggleBtn">
+                    <span class="sidebar-text">Session PDFs</span>
+                    <span id="sessionArrow" class="sidebar-text">▾</span>
+                </div>
+                <div class="session-panel-body" id="sessionPanelBody">
+                    <div class="doc-empty">No PDFs yet. Upload one to start reading.</div>
+                    <div id="docList"></div>
+                </div>
             </div>
         </div>
-        
-        <input type="file" id="fileInput" accept=".pdf">
-        
-        <div class="file-name" id="fileName"></div>
-        
-        <button class="convert-btn" id="convertBtn">Convert to Audio 🎧</button>
-        
-        <div class="status" id="status"></div>
-        
-        <div class="audio-player" id="audioPlayer">
-            <h3>Your Audiobook:</h3>
-            <audio controls id="audio"></audio>
+
+        <!-- RIGHT: reader -->
+        <div class="right-panel">
+            <div class="reader-wrapper">
+                <div class="reader-header">
+                    <div class="reader-header-left">
+                        <h2>Text from PDF</h2>
+                        <span id="progressLabel">Waiting for upload…</span>
+                    </div>
+                    <div class="reader-header-right">
+                        <button id="readingSettingsBtn">Reading settings</button>
+                        <button id="fullModeToggle">Full reading mode</button>
+                    </div>
+                </div>
+
+                <div class="reader-content" id="readerContent">
+                    <p class="reader-placeholder">
+                        Upload a PDF and click “Convert to Audio”. The extracted text will appear here so you can
+                        read along as you listen.
+                    </p>
+                </div>
+
+                <!-- selection toolbar -->
+                <div id="highlightToolbar">
+                    <button id="addHighlightBtn">Highlight + note</button>
+                </div>
+
+                <!-- note popup at text -->
+                <div id="notePopup">
+                    <div id="notePopupHeader">
+                        <h3>Highlight & note</h3>
+                        <button id="noteCloseBtn" aria-label="Close">×</button>
+                    </div>
+                    <div class="color-options">
+                        <div class="color-chip yellow" data-color="yellow" title="Yellow"></div>
+                        <div class="color-chip pink" data-color="pink" title="Pink"></div>
+                        <div class="color-chip blue" data-color="blue" title="Blue"></div>
+                        <div class="color-chip green" data-color="green" title="Green"></div>
+                        <div class="color-chip purple" data-color="purple" title="Purple"></div>
+                    </div>
+                    <textarea id="noteText" placeholder="Add an optional note for this highlight..."></textarea>
+                    <div id="notePopupFooter">
+                        <button id="noteDeleteBtn">Delete</button>
+                        <button id="noteCancelBtn">Cancel</button>
+                        <button id="noteSaveBtn">Save</button>
+                    </div>
+                </div>
+
+                <!-- Reading settings modal -->
+                <div id="readerSettingsModal" class="settings-modal">
+                    <div class="settings-modal-content">
+                        <div class="settings-modal-header">
+                            <h3>Reading settings</h3>
+                            <button id="settingsCloseBtn" aria-label="Close">×</button>
+                        </div>
+                        <div class="settings-group">
+                            <span>Font size</span>
+                            <button id="fontSmallerBtn">−</button>
+                            <button id="fontLargerBtn">+</button>
+                        </div>
+                        <div class="settings-group" style="margin-top: 8px;">
+                            <span>Theme</span>
+                            <button class="theme-toggle-btn active" id="themeSepiaBtn">Sepia</button>
+                            <button class="theme-toggle-btn" id="themeDarkBtn">Dark</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const fileName = document.getElementById('fileName');
-        const convertBtn = document.getElementById('convertBtn');
-        const status = document.getElementById('status');
-        const audioPlayer = document.getElementById('audioPlayer');
-        const audio = document.getElementById('audio');
-        
-        let selectedFile = null;
-        
-        fileInput.addEventListener('change', (e) => {
-            selectedFile = e.target.files[0];
-            if (selectedFile) {
-                fileName.textContent = `Selected: ${selectedFile.name}`;
-                convertBtn.style.display = 'block';
-            }
+    <!-- Sticky bottom audio bar -->
+    <div class="audio-player" id="audioPlayer">
+        <h3>Audio playback</h3>
+        <audio controls id="audio"></audio>
+        <p class="info-note">
+            As the audio plays, the text will scroll and fade to mark what you've already heard.
+        </p>
+    </div>
+</div>
+
+<script>
+    // --- DOM refs ---
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const convertBtn = document.getElementById('convertBtn');
+    const status = document.getElementById('status');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const audio = document.getElementById('audio');
+    const readerContent = document.getElementById('readerContent');
+    const progressLabel = document.getElementById('progressLabel');
+    const currentDocLabel = document.getElementById('currentDocLabel');
+
+    const highlightToolbar = document.getElementById('highlightToolbar');
+    const addHighlightBtn = document.getElementById('addHighlightBtn');
+
+    const notePopup = document.getElementById('notePopup');
+    const noteCloseBtn = document.getElementById('noteCloseBtn');
+    const noteText = document.getElementById('noteText');
+    const noteSaveBtn = document.getElementById('noteSaveBtn');
+    const noteDeleteBtn = document.getElementById('noteDeleteBtn');
+    const noteCancelBtn = document.getElementById('noteCancelBtn');
+    const colorChips = notePopup.querySelectorAll('.color-chip');
+
+    const docListEl = document.getElementById('docList');
+    const sessionPanelBody = document.getElementById('sessionPanelBody');
+    const sessionToggleBtn = document.getElementById('sessionToggleBtn');
+    const sessionArrow = document.getElementById('sessionArrow');
+
+    const fullModeToggle = document.getElementById('fullModeToggle');
+    const readingSettingsBtn = document.getElementById('readingSettingsBtn');
+    const readerSettingsModal = document.getElementById('readerSettingsModal');
+    const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+    const fontSmallerBtn = document.getElementById('fontSmallerBtn');
+    const fontLargerBtn = document.getElementById('fontLargerBtn');
+    const themeSepiaBtn = document.getElementById('themeSepiaBtn');
+    const themeDarkBtn = document.getElementById('themeDarkBtn');
+
+    const controlsPanel = document.querySelector('.controls-panel');
+    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+    const sidebarUploadIcon = document.getElementById('sidebarUploadIcon');
+    const sidebarDocsIcon = document.getElementById('sidebarDocsIcon');
+
+    // --- State ---
+    let selectedFile = null;
+    let documents = []; // {id, name, audioFile, text, highlights:{ [hid]: {color, note, indices[]} } }
+    let currentDocId = null;
+
+    let wordSpans = [];
+    let lastProgressIndex = -1;
+
+    // highlight / note state
+    let selectionRange = null;
+    let pendingWordIndices = [];
+    let activeHighlightId = null;
+    let selectedColor = 'yellow';
+
+    // reading settings
+    let readerFontSize = 0.95; // rem
+    let sidebarCollapsed = false;
+    let sessionCollapsed = false;
+    let isFullReading = false;
+
+    function getCurrentDoc() {
+        return documents.find(d => d.id === currentDocId) || null;
+    }
+
+    // --- Session PDFs list ---
+    function renderDocList() {
+        docListEl.innerHTML = '';
+        const existingEmpty = sessionPanelBody.querySelector('.doc-empty');
+        if (existingEmpty) existingEmpty.remove();
+
+        if (!documents.length) {
+            const empty = document.createElement('div');
+            empty.className = 'doc-empty';
+            empty.textContent = 'No PDFs yet. Upload one to start reading.';
+            sessionPanelBody.insertBefore(empty, docListEl);
+            return;
+        }
+
+        documents.forEach(doc => {
+            const btn = document.createElement('button');
+            btn.className = 'doc-item' + (doc.id === currentDocId ? ' active' : '');
+            btn.dataset.docId = doc.id;
+
+            const title = document.createElement('div');
+            title.className = 'doc-item-title sidebar-text';
+            title.textContent = doc.name;
+
+            const sub = document.createElement('div');
+            sub.className = 'doc-item-sub sidebar-text';
+            sub.textContent = 'Audio: ' + doc.audioFile;
+
+            btn.appendChild(title);
+            btn.appendChild(sub);
+            btn.addEventListener('click', () => setCurrentDocument(doc.id));
+
+            docListEl.appendChild(btn);
         });
-        
-        convertBtn.addEventListener('click', async () => {
-            if (!selectedFile) return;
-            
-            // Show loading
-            status.className = 'status loading';
-            status.textContent = '⏳ Converting PDF to audio... This may take a minute.';
-            audioPlayer.style.display = 'none';
-            convertBtn.disabled = true;
-            
-            // Create form data
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-            
-            try {
-                // Send to backend
-                const response = await fetch('/convert', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Show success
-                    status.className = 'status success';
-                    status.textContent = '✅ ' + data.message;
-                    
-                    // Show audio player
-                    audioPlayer.style.display = 'block';
-                    audio.src = `/audio/${data.audio_file}`;
-                } else {
-                    throw new Error('Conversion failed');
-                }
-            } catch (error) {
-                status.className = 'status';
-                status.style.display = 'block';
-                status.style.background = '#f8d7da';
-                status.style.color = '#721c24';
-                status.textContent = '❌ Error converting PDF. Please try again.';
-            } finally {
-                convertBtn.disabled = false;
-            }
+    }
+
+    function resetReader() {
+        readerContent.innerHTML = '<p class="reader-placeholder">Extracted text will appear here.</p>';
+        wordSpans = [];
+        lastProgressIndex = -1;
+        progressLabel.textContent = 'Waiting for upload…';
+        hideHighlightToolbar();
+        hideNotePopup();
+    }
+
+    function setCurrentDocument(docId) {
+        const doc = documents.find(d => d.id === docId);
+        if (!doc) return;
+
+        currentDocId = docId;
+        renderDocList();
+        currentDocLabel.textContent = 'Currently viewing: ' + doc.name;
+
+        renderTextForDoc(doc);
+
+        audioPlayer.style.display = 'block';
+        audio.src = `/audio/${doc.audioFile}`;
+        audio.currentTime = 0;
+        audio.pause();
+        progressLabel.textContent = 'Ready to play';
+    }
+
+    function renderTextForDoc(doc) {
+        readerContent.innerHTML = '';
+        wordSpans = [];
+        lastProgressIndex = -1;
+        hideHighlightToolbar();
+        hideNotePopup();
+
+        const text = doc.text || '';
+        const paragraphs = text.split(/\n\s*\n+/);
+
+        if (!paragraphs.length || !text.trim()) {
+            readerContent.innerHTML =
+                '<p class="reader-placeholder">No readable text found in this PDF.</p>';
+            progressLabel.textContent = 'No text found';
+            return;
+        }
+
+        paragraphs.forEach(para => {
+            const trimmed = para.trim();
+            if (!trimmed) return;
+
+            const pEl = document.createElement('p');
+            const words = trimmed.split(/\s+/);
+
+            words.forEach(word => {
+                if (!word) return;
+                const span = document.createElement('span');
+                span.textContent = word + ' ';
+                span.classList.add('word');
+                span.dataset.index = wordSpans.length.toString();
+                pEl.appendChild(span);
+                wordSpans.push(span);
+            });
+
+            readerContent.appendChild(pEl);
         });
-    </script>
+
+        // Re-apply highlights
+        Object.entries(doc.highlights || {}).forEach(([hid, meta]) => {
+            (meta.indices || []).forEach(i => {
+                const span = wordSpans[i];
+                if (!span) return;
+                span.dataset.highlightId = hid;
+                span.classList.add('highlight');
+                span.classList.remove(
+                    'highlight-yellow',
+                    'highlight-pink',
+                    'highlight-blue',
+                    'highlight-green',
+                    'highlight-purple'
+                );
+                span.classList.add('highlight-' + meta.color);
+            });
+        });
+    }
+
+    // --- Upload & convert ---
+    uploadArea.addEventListener('click', () => fileInput.click());
+    sidebarUploadIcon.addEventListener('click', () => {
+        if (sidebarCollapsed) setSidebarCollapsed(false);
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        selectedFile = e.target.files[0];
+        if (selectedFile) {
+            fileName.textContent = `Selected: ${selectedFile.name}`;
+            convertBtn.style.display = 'block';
+        } else {
+            fileName.textContent = '';
+            convertBtn.style.display = 'none';
+        }
+    });
+
+    convertBtn.addEventListener('click', async () => {
+        if (!selectedFile) return;
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        status.className = 'status loading';
+        status.textContent = 'Converting PDF to audio and extracting text…';
+        convertBtn.disabled = true;
+
+        try {
+            const response = await fetch('/convert', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || 'Conversion failed');
+            }
+
+            status.className = 'status success';
+            status.textContent = '✅ ' + data.message;
+
+            const docId = 'doc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+            const newDoc = {
+                id: docId,
+                name: selectedFile.name,
+                audioFile: data.audio_file,
+                text: data.text || '',
+                highlights: {}
+            };
+
+            documents.push(newDoc);
+            setCurrentDocument(docId);
+            renderDocList();
+
+        } catch (err) {
+            console.error(err);
+            status.className = 'status error';
+            status.textContent = '❌ Error converting PDF. Please try again.';
+            resetReader();
+        } finally {
+            convertBtn.disabled = false;
+        }
+    });
+
+    // --- Audio progress ---
+    function updateAudioProgress() {
+        const doc = getCurrentDoc();
+        if (!doc || !audio.duration || !wordSpans.length) return;
+
+        const progress = audio.currentTime / audio.duration;
+        const targetIndex = Math.min(
+            wordSpans.length - 1,
+            Math.max(0, Math.floor(progress * wordSpans.length))
+        );
+
+        const percent = Math.round(progress * 100);
+        progressLabel.textContent = `Listening progress: ${percent}%`;
+
+        if (targetIndex === lastProgressIndex) return;
+
+        if (targetIndex > lastProgressIndex) {
+            for (let i = lastProgressIndex + 1; i <= targetIndex; i++) {
+                if (wordSpans[i]) wordSpans[i].classList.add('listened');
+            }
+        } else {
+            for (let i = targetIndex + 1; i <= lastProgressIndex; i++) {
+                if (wordSpans[i]) wordSpans[i].classList.remove('listened');
+            }
+        }
+
+        lastProgressIndex = targetIndex;
+
+        const currentSpan = wordSpans[targetIndex];
+        if (currentSpan) {
+            currentSpan.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+    }
+
+    audio.addEventListener('timeupdate', updateAudioProgress);
+    audio.addEventListener('seeked', updateAudioProgress);
+    audio.addEventListener('ended', () => {
+        wordSpans.forEach(span => span.classList.add('listened'));
+        progressLabel.textContent = 'Playback finished';
+    });
+
+    // --- Session panel collapse ---
+    sessionToggleBtn.addEventListener('click', () => {
+        sessionCollapsed = !sessionCollapsed;
+        sessionPanelBody.style.display = sessionCollapsed ? 'none' : 'block';
+        sessionArrow.textContent = sessionCollapsed ? '▸' : '▾';
+    });
+
+    sidebarDocsIcon.addEventListener('click', () => {
+        if (sidebarCollapsed) setSidebarCollapsed(false);
+        const sessionPanel = document.querySelector('.session-panel');
+        if (sessionPanel) {
+            sessionPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+
+    // --- Sidebar collapse ---
+    function setSidebarCollapsed(collapsed) {
+        sidebarCollapsed = collapsed;
+        if (collapsed) {
+            controlsPanel.classList.add('collapsed');
+            sidebarToggleBtn.textContent = '➤';
+        } else {
+            controlsPanel.classList.remove('collapsed');
+            sidebarToggleBtn.textContent = '☰';
+        }
+    }
+
+    sidebarToggleBtn.addEventListener('click', () => {
+        setSidebarCollapsed(!sidebarCollapsed);
+    });
+
+    // --- Highlight toolbar ---
+    function hideHighlightToolbar() {
+        highlightToolbar.style.display = 'none';
+        selectionRange = null;
+        pendingWordIndices = [];
+    }
+
+    readerContent.addEventListener('mouseup', () => {
+        setTimeout(() => {
+            const selection = window.getSelection();
+            if (!selection || selection.isCollapsed) {
+                hideHighlightToolbar();
+                return;
+            }
+            if (!readerContent.contains(selection.anchorNode) ||
+                !readerContent.contains(selection.focusNode)) {
+                hideHighlightToolbar();
+                return;
+            }
+
+            const range = selection.getRangeAt(0);
+            selectionRange = range.cloneRange();
+
+            pendingWordIndices = [];
+            wordSpans.forEach((span, idx) => {
+                try {
+                    if (selectionRange.intersectsNode(span)) {
+                        pendingWordIndices.push(idx);
+                    }
+                } catch (e) {}
+            });
+
+            if (!pendingWordIndices.length) {
+                hideHighlightToolbar();
+                return;
+            }
+
+            const rect = range.getBoundingClientRect();
+            const containerRect = readerContent.getBoundingClientRect();
+
+            highlightToolbar.style.display = 'flex';
+            highlightToolbar.style.left =
+                (rect.left - containerRect.left + readerContent.scrollLeft) + 'px';
+            highlightToolbar.style.top =
+                (rect.top - containerRect.top + readerContent.scrollTop - 30) + 'px';
+        }, 0);
+    });
+
+    function hideNotePopup() {
+        notePopup.style.display = 'none';
+        activeHighlightId = null;
+        pendingWordIndices = [];
+    }
+
+    function openNotePopupAt(anchorRect, meta, options) {
+        const doc = getCurrentDoc();
+        if (!doc) return;
+
+        selectedColor = meta.color || 'yellow';
+
+        colorChips.forEach(chip => {
+            chip.classList.toggle('selected', chip.dataset.color === selectedColor);
+        });
+
+        noteText.value = meta.note || '';
+        noteDeleteBtn.style.display = options.canDelete ? 'inline-block' : 'none';
+
+        const containerRect = readerContent.getBoundingClientRect();
+
+        notePopup.style.display = 'block';
+        const popupWidth = notePopup.offsetWidth;
+
+        let left = anchorRect.left - containerRect.left + readerContent.scrollLeft;
+        let top = anchorRect.bottom - containerRect.top + readerContent.scrollTop + 6;
+
+        if (left + popupWidth > readerContent.scrollWidth) {
+            left = readerContent.scrollWidth - popupWidth - 10;
+        }
+        if (left < 0) left = 0;
+        if (top < 10) top = 10;
+
+        notePopup.style.left = left + 'px';
+        notePopup.style.top = top + 'px';
+    }
+
+    addHighlightBtn.addEventListener('click', () => {
+        const doc = getCurrentDoc();
+        if (!doc || !pendingWordIndices.length || !selectionRange) return;
+
+        activeHighlightId = null;
+        const rect = selectionRange.getBoundingClientRect();
+        openNotePopupAt(rect, { color: selectedColor, note: '' }, { canDelete: false });
+
+        const sel = window.getSelection();
+        if (sel) sel.removeAllRanges();
+        hideHighlightToolbar();
+    });
+
+    readerContent.addEventListener('click', (e) => {
+        const span = e.target.closest('.word');
+        if (!span) return;
+
+        const hid = span.dataset.highlightId;
+        if (!hid) return;
+
+        const doc = getCurrentDoc();
+        if (!doc || !doc.highlights || !doc.highlights[hid]) return;
+
+        activeHighlightId = hid;
+        pendingWordIndices = (doc.highlights[hid].indices || []).slice();
+
+        const rect = span.getBoundingClientRect();
+        openNotePopupAt(rect, doc.highlights[hid], { canDelete: true });
+    });
+
+    colorChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            selectedColor = chip.dataset.color;
+            colorChips.forEach(c => c.classList.toggle('selected', c === chip));
+        });
+    });
+
+    function closeNotePopup() {
+        hideNotePopup();
+    }
+
+    noteCloseBtn.addEventListener('click', closeNotePopup);
+    noteCancelBtn.addEventListener('click', closeNotePopup);
+
+    noteSaveBtn.addEventListener('click', () => {
+        const doc = getCurrentDoc();
+        if (!doc) return;
+
+        if (!activeHighlightId && !pendingWordIndices.length) {
+            closeNotePopup();
+            return;
+        }
+
+        if (!activeHighlightId) {
+            activeHighlightId = 'h_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+        }
+
+        let indices = pendingWordIndices.slice();
+        if (!indices.length && doc.highlights[activeHighlightId]) {
+            indices = (doc.highlights[activeHighlightId].indices || []).slice();
+        }
+
+        indices = Array.from(new Set(indices)).sort((a, b) => a - b);
+        const note = noteText.value.trim();
+
+        doc.highlights[activeHighlightId] = {
+            color: selectedColor,
+            note,
+            indices
+        };
+
+        indices.forEach(i => {
+            const span = wordSpans[i];
+            if (!span) return;
+            span.dataset.highlightId = activeHighlightId;
+            span.classList.add('highlight');
+            span.classList.remove(
+                'highlight-yellow',
+                'highlight-pink',
+                'highlight-blue',
+                'highlight-green',
+                'highlight-purple'
+            );
+            span.classList.add('highlight-' + selectedColor);
+        });
+
+        closeNotePopup();
+    });
+
+    noteDeleteBtn.addEventListener('click', () => {
+        const doc = getCurrentDoc();
+        if (!doc || !activeHighlightId) {
+            closeNotePopup();
+            return;
+        }
+
+        const meta = doc.highlights[activeHighlightId];
+        if (meta && meta.indices) {
+            meta.indices.forEach(i => {
+                const span = wordSpans[i];
+                if (!span) return;
+                span.classList.remove(
+                    'highlight',
+                    'highlight-yellow',
+                    'highlight-pink',
+                    'highlight-blue',
+                    'highlight-green',
+                    'highlight-purple'
+                );
+                delete span.dataset.highlightId;
+            });
+        }
+
+        delete doc.highlights[activeHighlightId];
+        closeNotePopup();
+    });
+
+    document.addEventListener('mousedown', (e) => {
+        if (!readerContent.contains(e.target)) {
+            hideHighlightToolbar();
+        }
+    });
+
+    // --- Full reading mode ---
+    fullModeToggle.addEventListener('click', () => {
+        isFullReading = !isFullReading;
+        document.body.classList.toggle('full-reading', isFullReading);
+        fullModeToggle.textContent = isFullReading ? 'Exit full reading' : 'Full reading mode';
+    });
+
+    // --- Reading settings modal ---
+    function updateFontSize() {
+        readerContent.style.setProperty('--reader-font-size', readerFontSize + 'rem');
+    }
+    updateFontSize();
+
+    readingSettingsBtn.addEventListener('click', () => {
+        readerSettingsModal.style.display = 'flex';
+    });
+
+    settingsCloseBtn.addEventListener('click', () => {
+        readerSettingsModal.style.display = 'none';
+    });
+
+    readerSettingsModal.addEventListener('click', (e) => {
+        if (e.target === readerSettingsModal) {
+            readerSettingsModal.style.display = 'none';
+        }
+    });
+
+    fontSmallerBtn.addEventListener('click', () => {
+        readerFontSize = Math.max(0.8, readerFontSize - 0.05);
+        updateFontSize();
+    });
+
+    fontLargerBtn.addEventListener('click', () => {
+        readerFontSize = Math.min(1.4, readerFontSize + 0.05);
+        updateFontSize();
+    });
+
+    themeSepiaBtn.addEventListener('click', () => {
+        document.body.classList.remove('theme-dark');
+        themeSepiaBtn.classList.add('active');
+        themeDarkBtn.classList.remove('active');
+    });
+
+    themeDarkBtn.addEventListener('click', () => {
+        document.body.classList.add('theme-dark');
+        themeDarkBtn.classList.add('active');
+        themeSepiaBtn.classList.remove('active');
+    });
+</script>
 </body>
 </html>
